@@ -3,13 +3,14 @@ import { Search, SlidersHorizontal } from 'lucide-react';
 import ItemCard from '../components/ItemCard';
 import api from '../api';
 
-const CATEGORIES = ['All', 'Books', 'Electronics', 'Stationery', 'Clothing', 'Furniture', 'Other'];
+const CATEGORIES = ['All', 'Electronics', 'Books', 'Furniture', 'Clothing', 'Sports', 'Stationery', 'Other'];
 
 export default function Marketplace() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [statusFilter, setStatusFilter] = useState('all');
     const [maxPrice, setMaxPrice] = useState(5000);
 
     useEffect(() => {
@@ -33,7 +34,12 @@ export default function Marketplace() {
             if (maxPrice) params.maxPrice = maxPrice;
 
             const { data } = await api.get('/items', { params });
-            setItems(data);
+            // Client-side filtering for status since backend might not support it yet
+            let filtered = data;
+            if (statusFilter !== 'all') {
+                filtered = data.filter(item => item.status === statusFilter);
+            }
+            setItems(filtered);
         } catch (err) {
             console.error("Error fetching items", err);
         } finally {
@@ -92,22 +98,41 @@ export default function Marketplace() {
 
             {/* Main Content */}
             <main className="flex-1">
-                {/* Search Header */}
-                <div className="bg-white p-4 rounded-xl border border-gray-100 mb-6 flex items-center gap-4">
-                    <div className="relative flex-1">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-gray-400" />
+                {/* Status Tabs and Search Header */}
+                <div className="flex flex-col gap-6 mb-8">
+                    <div className="flex items-center justify-between">
+                        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100">
+                            {['all', 'available', 'sold'].map((status) => (
+                                <button
+                                    key={status}
+                                    onClick={() => setStatusFilter(status)}
+                                    className={`px-6 py-2 rounded-lg font-semibold text-sm capitalize transition ${statusFilter === status
+                                        ? 'bg-primary text-white shadow-md'
+                                        : 'text-gray-500 hover:text-primary'
+                                        }`}
+                                >
+                                    {status}
+                                </button>
+                            ))}
                         </div>
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                            placeholder="Search marketplace..."
-                        />
                     </div>
-                    <div className="text-sm text-gray-500">
-                        Showing {items.length} results
+
+                    <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+                        <div className="relative flex-1">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <Search className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="block w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-gray-900 placeholder-gray-400"
+                                placeholder="Search items by title or description..."
+                            />
+                        </div>
+                        <div className="hidden sm:block text-sm font-semibold text-gray-400">
+                            {items.length} Items Found
+                        </div>
                     </div>
                 </div>
 
