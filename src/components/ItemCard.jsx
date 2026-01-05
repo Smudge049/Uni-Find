@@ -1,34 +1,61 @@
-/* Item card */
-export default function ItemCard({ item }) {
-    return (
-        <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-100">
-            <div className="bg-gray-200 h-48 w-full relative">
-                <img
-                    src={item.image_url || item.image || "https://placehold.co/400x300"}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                />
-                {item.status === 'Sold' && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        SOLD
-                    </div>
-                )}
-            </div>
-            <div className="p-4">
-                <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-semibold text-gray-900 truncate pr-2">{item.title}</h3>
-                    <span className="text-blue-600 font-bold whitespace-nowrap">Rs {item.price}</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1 truncate">{item.description}</p>
+import { Clock, Box } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-                <div className="mt-4 flex justify-between items-center">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {item.category}
-                    </span>
-                    <span className="text-xs text-gray-400">2d ago</span>
+export default function ItemCard({ item }) {
+    const formattedDate = new Date(item.created_at).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric'
+    });
+
+    return (
+        <Link to={`/items/${item.id}`} className="block group">
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:border-primary/20 flex flex-col h-full">
+                <div className="h-48 bg-gray-50 relative overflow-hidden flex items-center justify-center">
+                    {item.image_url || item.image ? (
+                        <img
+                            src={item.image_url || item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                    ) : (
+                        <Box className="h-12 w-12 text-gray-200" />
+                    )}
+                    <div className="absolute top-3 left-3 flex gap-2">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm ${item.status === 'sold' ? 'bg-gray-100 text-gray-500' : 'bg-success/10 text-success'
+                            }`}>
+                            {item.status || 'available'}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="p-5 flex flex-col flex-1">
+                    <div className="mb-3">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
+                            {item.category}
+                        </span>
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">
+                            {item.title}
+                        </h3>
+                    </div>
+
+                    <div className="text-xl font-extrabold text-primary mb-3">
+                        NPR {Number(item.price).toLocaleString()}
+                    </div>
+
+                    <p className="text-sm text-gray-500 line-clamp-2 mb-4 flex-1">
+                        {item.description}
+                    </p>
+
+                    <div className="pt-4 border-t border-gray-50 flex items-center justify-between text-gray-400 text-xs font-medium">
+                        <div className="flex items-center">
+                            <Clock className="h-3.5 w-3.5 mr-1.5" />
+                            {formattedDate}
+                        </div>
+                        <div className="text-gray-300">KU Campus</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
 

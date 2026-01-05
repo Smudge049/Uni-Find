@@ -4,12 +4,13 @@ import ItemCard from '../components/ItemCard';
 import api from '../api';
 
 const CATEGORIES = [
-    { name: 'Books & Notes', icon: '📚' },
-    { name: 'Stationery', icon: '✏️' },
     { name: 'Electronics', icon: '💻' },
+    { name: 'Books', icon: '📚' },
     { name: 'Furniture', icon: '🪑' },
     { name: 'Clothing', icon: '👕' },
-    { name: 'Others', icon: '📦' },
+    { name: 'Sports', icon: '⚽' },
+    { name: 'Stationery', icon: '✏️' },
+    { name: 'Other', icon: '📦' },
 ];
 
 export default function Home() {
@@ -27,26 +28,34 @@ export default function Home() {
         fetchItems();
     }, []);
     return (
-        <div className="space-y-12">
+        <div className="space-y-16">
             {/* Hero Section */}
-            <section className="bg-blue-600 rounded-2xl p-8 md:p-12 text-center text-white relative overflow-hidden">
-                <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-                    <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-                        Welcome to UNI-find
-                    </h1>
-                    <p className="text-lg text-blue-100">
-                        Where Students Connect, Trade, and Find.
-                    </p>
+            <section className="bg-white py-16 px-4 text-center border-b border-gray-100 -mx-4 sm:-mx-6 lg:-mx-8">
+                <div className="max-w-3xl mx-auto space-y-8">
+                    <div className="space-y-4">
+                        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-dark to-primary">
+                            Welcome to UNI-find
+                        </h1>
+                        <p className="text-xl text-gray-500 font-medium">
+                            Kathmandu University's Student Marketplace
+                        </p>
+                    </div>
 
-                    <div className="relative max-w-lg mx-auto mt-8">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-gray-500" />
+                    <div className="relative max-w-2xl mx-auto mt-10">
+                        <div className="flex items-center bg-white border-2 border-gray-100 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 rounded-2xl p-2 transition-all shadow-sm">
+                            <div className="pl-4 pr-2 text-gray-400">
+                                <Search className="h-6 w-6" />
+                            </div>
+                            <input
+                                type="text"
+                                className="block w-full py-3 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none sm:text-lg"
+                                placeholder="Search for items, books, furniture..."
+                            />
+                            <select className="hidden md:block border-l-2 border-gray-100 px-4 py-2 text-gray-600 bg-transparent focus:outline-none cursor-pointer font-medium">
+                                <option>All Categories</option>
+                                {CATEGORIES.map(c => <option key={c.name}>{c.name}</option>)}
+                            </select>
                         </div>
-                        <input
-                            type="text"
-                            className="block w-full pl-10 pr-4 py-3 border-none rounded-full leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            placeholder="Search for books, electronics, and more..."
-                        />
                     </div>
                 </div>
             </section>
