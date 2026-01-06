@@ -1,3 +1,5 @@
+/* Add Item */
+
 import { useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import api from '../api';
@@ -251,3 +253,4 @@ export default function AddItem() {
         </div>
     );
 }
+
