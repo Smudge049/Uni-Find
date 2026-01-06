@@ -1,3 +1,5 @@
+/* Modal */
+
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
 
