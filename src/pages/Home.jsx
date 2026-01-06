@@ -1,3 +1,5 @@
+/* Home Page */
+
 import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import ItemCard from '../components/ItemCard';
@@ -92,3 +94,4 @@ export default function Home() {
         </div>
     );
 }
+
